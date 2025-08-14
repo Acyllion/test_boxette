@@ -8,27 +8,32 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Serve the index.html from the root directory
 app.use(express.static(__dirname));
 
-// Конфигурация
+// Configuration
 const config = {
   maxConcurrent: 4,
-  timeout: 30000,
+  timeout: 45000, // Increased timeout for potentially slow network
   retries: 2
 };
 
-// Глобальный кластер
+// Global cluster
 let cluster;
 
 async function initCluster() {
+  console.log('Initializing Puppeteer Cluster...');
   cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_PAGE,
     maxConcurrency: config.maxConcurrent,
     puppeteerOptions: {
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      headless: 'new',
+      // Removed hardcoded executablePath for better portability.
+      // Puppeteer will download and use a compatible version of Chromium.
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
-    timeout: config.timeout
+    timeout: config.timeout,
+    retryLimit: config.retries
   });
 
   await cluster.task(async ({ page, data: code }) => {
@@ -62,8 +67,8 @@ async function initCluster() {
       if (!response?.Data?.Rows?.length) {
         return { trackingCode: code, status: "Not Arrived" };
       }
-
-      const result = { trackingCode: code, status: "In transit" }; // Изменено с "Найдено" на "In transit"
+      
+      const result = { trackingCode: code, status: "In transit" };
 
       response.Data.Fields.forEach((field, i) => {
         if (!["ID", "GR_ID", "UN_ID"].includes(field)) {
@@ -73,73 +78,96 @@ async function initCluster() {
 
       return result;
     } catch (error) {
+      console.error(`Error processing tracking code ${code} on RS.ge:`, error);
       throw error;
     }
   });
+  console.log('Puppeteer Cluster initialized successfully.');
 }
 
-initCluster().catch(console.error);
+initCluster().catch(err => console.error('Failed to initialize cluster:', err));
 
-// Функция для парсинга посылок
 const parseShipments = async (page, url, defaultStatus) => {
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
-
   try {
-    return await page.$$eval('div.orange a', (anchors, status) => {
-      return Array.from(anchors).slice(0, 10).map(a => {
-        const code = a.textContent.trim().replace(/^#\s*/, '');
-        if (!/^[A-Z0-9]+$/i.test(code)) return null;
+    console.log(`Navigating to ${url} to parse shipments...`);
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    
+    const parcelSelector = 'div.orange';
+    
+    await page.waitForSelector(parcelSelector, { timeout: 10000 }).catch(() => {
+        console.log(`No parcels found on page: ${url}`);
+        return [];
+    });
+
+    return await page.$$eval(parcelSelector, (parcels, status) => {
+      return parcels.slice(0, 10).map(parcel => {
+        const trackingAnchor = parcel.querySelector('a');
+        if (!trackingAnchor) return null;
+
+        const code = trackingAnchor.textContent.trim().replace(/^#\s*/, '');
+        if (!/^[A-Z0-9]{6,}$/i.test(code)) return null;
 
         return {
           trackingCode: code,
-          packageName: a.closest('div.orange')?.nextElementSibling?.textContent?.trim() || '',
+          packageName: parcel.nextElementSibling?.textContent?.trim() || 'No description',
           status: status
         };
       }).filter(Boolean);
     }, defaultStatus);
   } catch (error) {
-    console.error(`Error parsing ${url}:`, error);
+    console.error(`Error parsing shipments from ${url}:`, error.message);
     return [];
   }
 };
+
 
 app.post('/check', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ error: 'Требуется email и пароль' });
+    return res.status(400).json({ error: 'Email and password are required' });
   }
 
   let browser;
   try {
+    console.log('Launching browser for Boxette login...');
     browser = await puppeteer.launch({
-      headless: true,
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      headless: 'new',
       args: ['--no-sandbox']
     });
 
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(config.timeout);
-
-    // Логин в Boxette
+    
+    console.log('Navigating to Boxette login page...');
     await page.goto('https://profile1.boxette.ge/log-in', {
-      waitUntil: 'domcontentloaded',
-      timeout: config.timeout
+      waitUntil: 'domcontentloaded'
     });
 
-    await page.$eval('#loginform-email', (el, email) => el.value = email, email);
-    await page.$eval('#loginform-pass', (el, pass) => el.value = pass, password);
+    await page.type('#loginform-email', email);
+    await page.type('#loginform-pass', password);
 
-    await Promise.all([
-      page.click("input[type='submit']"),
-      page.waitForNavigation({ waitUntil: 'domcontentloaded' })
-    ]);
+    console.log('Submitting login form...');
+    await page.click("input[type='submit']");
+    
+    const successSelector = 'a[href*="/shipments/shipped"]';
+    const errorSelector = '.error-summary, .has-error';
 
-    // Парсим оба типа посылок
+    try {
+        console.log('Verifying login success...');
+        await page.waitForSelector(successSelector, { timeout: 15000 });
+        console.log('Login successful!');
+    } catch (e) {
+        console.error('Login failed. Could not find success selector.');
+        return res.status(401).json({ error: 'Authentication failed. Please check your email and password.' });
+    }
+
+    // --- If login is successful, proceed to parse all shipment categories ---
+
     const shippedShipments = await parseShipments(
       page,
       'https://profile1.boxette.ge/profile/shipments/shipped',
-      'В пути'
+      'В пути' // "In transit"
     );
 
     const readyShipments = await parseShipments(
@@ -147,19 +175,28 @@ app.post('/check', async (req, res) => {
       'https://profile1.boxette.ge/profile/shipments/in-kiev',
       'Ready to Pickup'
     );
+    
+    // *** UPDATED: Parse "Received" shipments and mark them as "In the Warehouse" ***
+    const receivedShipments = await parseShipments(
+      page,
+      'https://profile1.boxette.ge/profile/shipments/received',
+      'In the Warehouse'
+    );
 
-    const allShipments = [...shippedShipments, ...readyShipments];
+    const allShipments = [...shippedShipments, ...readyShipments, ...receivedShipments];
 
     if (!allShipments.length) {
+      console.log('No shipments found for this account across all categories.');
       return res.json([]);
     }
+    
+    console.log(`Found ${allShipments.length} total shipments. Checking status on RS.ge for those in transit...`);
 
-    // Проверяем только посылки "В пути" на RS.ge
     const results = await Promise.all(
       allShipments.map(item => {
         if (item.status === "В пути") {
           return cluster.execute(item.trackingCode)
-            .then(data => ({ ...item, ...data }))
+            .then(rsData => ({ ...item, ...rsData }))
             .catch(error => ({
               ...item,
               status: "Ошибка",
@@ -170,12 +207,17 @@ app.post('/check', async (req, res) => {
       })
     );
 
+    console.log('Finished processing all shipments.');
     res.json(results);
+
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('An unexpected error occurred:', error);
+    res.status(500).json({ error: 'An internal server error occurred: ' + error.message });
   } finally {
-    if (browser) await browser.close();
+    if (browser) {
+      console.log('Closing browser.');
+      await browser.close();
+    }
   }
 });
 
