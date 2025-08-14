@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" class="transition-colors duration-500">
+<html lang="en" class="transition-colors duration-700"> <!-- Slower theme transition -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Parcel Tracker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Load tsparticles bundle for basic functionality -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.9.3/tsparticles.bundle.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -13,98 +15,128 @@
       theme: {
         extend: {
           colors: {
-            primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
-            surface: { 50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4', 400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040', 800: '#262626', 900: '#171717' },
-            accent: { purple: '#8b5cf6', pink: '#ec4899', emerald: '#10b981', orange: '#f59e0b', cyan: '#06b6d4' }
+            // Slightly deeper/richer primary palette for ambient feel
+            primary: { 50: '#dbeafe', 100: '#bfdbfe', 200: '#93c5fd', 300: '#60a5fa', 400: '#3b82f6', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e3a8a', 800: '#1e40af', 900: '#1d3675' }, // Darker blues
+            surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' },
+            // Slightly richer accent palette
+            accent: { purple: '#8b5cf6', pink: '#ec4899', emerald: '#10b981', orange: '#f59e0b', cyan: '#06b6d4' } // Kept original rich accents
           },
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
           animation: {
-            'fade-in': 'fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-            'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-            'slide-up': 'slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-            'slide-in-right': 'slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'bounce-gentle': 'bounceGentle 2s ease-in-out infinite',
-            'shimmer': 'shimmer 2.5s linear infinite',
-            'glow': 'glow 2s ease-in-out infinite alternate',
-            'float': 'float 3s ease-in-out infinite',
-            'scale-in': 'scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            'ripple': 'ripple 0.6s linear',
-            'wiggle': 'wiggle 0.5s ease-in-out',
-            'shake': 'shake 0.5s ease-in-out'
+            // Slower, gentler animations for ambient feel
+            'fade-in': 'fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            'slide-up': 'slideUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            'slide-in-right': 'slideInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-gentle': 'bounceGentle 3s ease-in-out infinite',
+            'shimmer': 'shimmer 3s linear infinite',
+            'glow': 'glow 3s ease-in-out infinite alternate',
+            'float': 'float 4s ease-in-out infinite',
+            'scale-in': 'scaleIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            'ripple': 'ripple 0.8s linear',
+            'wiggle': 'wiggle 0.7s ease-in-out',
+            'shake': 'shake 0.7s ease-in-out'
           },
           keyframes: {
-            fadeIn: { '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
-            fadeInUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-            slideUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-            slideInRight: { '0%': { opacity: '0', transform: 'translateX(30px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } },
-            bounceGentle: { '0%, 100%': { transform: 'translateY(-3px) rotate(-1deg)' }, '50%': { transform: 'translateY(2px) rotate(1deg)' } },
+            fadeIn: { '0%': { opacity: '0', transform: 'translateY(15px) scale(0.97)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
+            fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            slideInRight: { '0%': { opacity: '0', transform: 'translateX(20px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } },
+            bounceGentle: { '0%, 100%': { transform: 'translateY(-2px) rotate(-0.5deg)' }, '50%': { transform: 'translateY(1px) rotate(0.5deg)' } },
             shimmer: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } },
-            glow: { '0%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)' }, '100%': { boxShadow: '0 0 40px rgba(59, 130, 246, 0.6)' } },
-            float: { '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' }, '50%': { transform: 'translateY(-10px) rotate(1deg)' } },
-            scaleIn: { '0%': { transform: 'scale(0.9)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
-            ripple: { '0%': { transform: 'scale(0)', opacity: '1' }, '100%': { transform: 'scale(4)', opacity: '0' } },
-            wiggle: { '0%, 100%': { transform: 'rotate(-3deg)' }, '50%': { transform: 'rotate(3deg)' } },
-            shake: { '0%, 100%': { transform: 'translateX(0)' }, '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' }, '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' } }
+            glow: { '0%': { boxShadow: '0 0 15px rgba(37, 99, 235, 0.25)' }, '100%': { boxShadow: '0 0 25px rgba(37, 99, 235, 0.4)' } }, // Adjusted glow color to primary-600
+            float: { '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' }, '50%': { transform: 'translateY(-6px) rotate(0.5deg)' } },
+            scaleIn: { '0%': { transform: 'scale(0.95)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
+            ripple: { '0%': { transform: 'scale(0)', opacity: '0.7' }, '100%': { transform: 'scale(4)', opacity: '0' } },
+            wiggle: { '0%, 100%': { transform: 'rotate(-1.5deg)' }, '50%': { transform: 'rotate(1.5deg)' } },
+            shake: { '0%, 100%': { transform: 'translateX(0)' }, '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-3px)' }, '20%, 40%, 60%, 80%': { transform: 'translateX(3px)' } }
           },
           boxShadow: {
-            'soft': '0 2px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-            'medium': '0 8px 30px -10px rgba(0, 0, 0, 0.15), 0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-            'large': '0 20px 50px -12px rgba(0, 0, 0, 0.25), 0 25px 25px -5px rgba(0, 0, 0, 0.1)',
-            'glow': '0 0 30px rgba(59, 130, 246, 0.3)',
-            'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)'
+            // Softer, more diffused shadows
+            'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+            'medium': '0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03)',
+            'large': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
+            'glow': '0 0 20px rgba(37, 99, 235, 0.25)', // Adjusted glow color
+            'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)'
           },
         }
       }
     }
   </script>
   <style>
-    /* --- Base & Fonts --- */
     * {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #8b5cf6 100%);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      /* Base gradient, particles will be on top */
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c084fc 100%); /* Darker base */
+      background-size: 600% 600%;
+      animation: gradientShift 25s ease infinite;
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
     }
+
     .dark body {
-      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #4c1d95 100%);
-      background-size: 400% 400%;
+      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #433880 100%);
+      background-size: 600% 600%;
+      animation: gradientShift 25s ease infinite;
     }
+
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    /* --- Layout & Glassmorphism --- */
+
+    /* Particle container styling - Re-added */
+    #tsparticles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Behind everything */
+      opacity: 0.25; /* Adjust opacity for subtlety */
+    }
+    .dark #tsparticles {
+        opacity: 0.2; /* Slightly less visible in dark mode */
+    }
+
+    /* Glass morphism with increased blur and adjusted opacity */
     .glass-morphism {
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      background: rgba(255, 255, 255, 0.12); /* Slightly less opaque */
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
     }
+
     .dark .glass-morphism {
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.18); /* Slightly more opaque dark */
+      border: 1px solid rgba(255, 255, 255, 0.09);
     }
+
+    /* Subtle background pattern */
     .background-pattern {
       position: fixed;
       inset: 0;
-      opacity: 0.03;
-      background-image: radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.3) 2px, transparent 0);
-      background-size: 50px 50px;
+      opacity: 0.02;
+      background-image: radial-gradient(circle at 30px 30px, rgba(255, 255, 255, 0.2) 1.5px, transparent 0);
+      background-size: 60px 60px;
       z-index: -1;
     }
+
     .dark .background-pattern {
-      opacity: 0.05;
+      opacity: 0.03;
+      background-image: radial-gradient(circle at 30px 30px, rgba(255, 255, 255, 0.1) 1.5px, transparent 0);
     }
+
+    /* Header wave */
     .header-wave {
       position: absolute;
       bottom: 0;
@@ -114,57 +146,69 @@
       line-height: 0;
       transform: rotate(180deg);
     }
+
     .header-wave svg {
       position: relative;
       display: block;
       width: calc(100% + 1.3px);
-      height: 40px;
+      height: 30px;
       transform: rotateY(180deg);
     }
-    /* --- Cards --- */
+
+    /* Parcel cards with softer hover effect */
     .parcel-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       position: relative;
       overflow: hidden;
     }
+
     .dark .parcel-card {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.28); /* Darker background */
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
+
     .parcel-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
     }
+
+    /* Subtle hover line effect */
     .parcel-card::before {
       content: '';
       position: absolute;
       top: 0;
       left: -100%;
       width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), transparent);
-      transition: left 0.5s ease;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.6), transparent); /* Adjusted color */
+      transition: left 0.7s ease;
     }
+
     .parcel-card:hover::before {
       left: 100%;
     }
+
+    /* Stats cards with softer hover */
     .stats-card {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(15px);
-      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
     }
+
     .dark .stats-card {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(15, 23, 42, 0.28); /* Darker background */
     }
+
     .stats-card:hover {
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.09);
     }
+
     .stats-card::before {
       content: '';
       position: absolute;
@@ -172,41 +216,60 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s ease;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      transition: left 0.7s ease;
     }
+
     .stats-card:hover::before {
       left: 100%;
     }
-    /* --- Form Elements & Buttons --- */
+
+    /* Form inputs */
     .form-input {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
     }
-    .dark .form-input { background: rgba(0, 0, 0, 0.2); }
+
+    .dark .form-input {
+      background: rgba(15, 23, 42, 0.22); /* Darker background */
+    }
+
     .form-input:focus {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2); /* Adjusted glow color */
       background: rgba(255, 255, 255, 1);
     }
-    .dark .form-input:focus { background: rgba(0, 0, 0, 0.4); }
-    .form-input.error {
-      border-color: #ef4444 !important;
-      animation: shake 0.5s ease-in-out;
+
+    .dark .form-input:focus {
+      background: rgba(15, 23, 42, 0.38); /* Darker background on focus */
     }
+
+    .form-input.error {
+      border-color: #f87171 !important;
+      animation: shake 0.7s ease-in-out;
+    }
+
+    /* Primary button with softer gradient and hover */
     .btn-primary {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
-      background-size: 200% 200%;
-      animation: gradientShift 3s ease infinite;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777); /* Darker/more saturated gradient */
+      background-size: 300% 300%;
+      animation: gradientShift 5s ease infinite;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       position: relative;
       overflow: hidden;
     }
+
     .btn-primary:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35); /* Adjusted shadow */
     }
+
+    .btn-primary:active {
+      transform: translateY(-0.5px) scale(0.99);
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
     .btn-primary::before {
       content: '';
       position: absolute;
@@ -214,117 +277,173 @@
       left: 50%;
       width: 0;
       height: 0;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 50%;
       transform: translate(-50%, -50%);
-      transition: width 0.8s, height 0.8s;
+      transition: width 1s, height 1s;
     }
+
     .btn-primary:hover::before {
-      width: 400px;
-      height: 400px;
+      width: 500px;
+      height: 500px;
     }
+
+    /* Floating refresh button - slower, subtler animation */
     .floating-button {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      width: 64px;
-      height: 64px;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #2563eb, #7c3aed); /* Darker gradient */
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       z-index: 50;
-      animation: float 3s ease-in-out infinite;
+      animation: float 4s ease-in-out infinite;
     }
+
     .floating-button:hover {
-      transform: scale(1.15) rotate(180deg);
-      box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6);
+      transform: scale(1.12) rotate(90deg);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.45);
     }
+
+    .floating-button:active {
+      transform: scale(1.08) rotate(80deg);
+    }
+
+    /* Filter buttons - softer colors and hover */
     .filter-btn {
-      padding: 0.85rem 1.6rem;
+      padding: 0.75rem 1.4rem;
       border-radius: 50px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.5s ease;
       background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #374151;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #475569;
       white-space: nowrap;
       cursor: pointer;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       position: relative;
       overflow: hidden;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
+
     .dark .filter-btn {
-      background: rgba(0, 0, 0, 0.3);
-      border-color: rgba(255, 255, 255, 0.2);
-      color: #d1d5db;
+      background: rgba(15, 23, 42, 0.3); /* Darker background */
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #94a3b8;
     }
+
     .filter-btn:hover {
-      transform: translateY(-3px) scale(1.07);
-      border-color: rgba(59, 130, 246, 0.6);
-      color: #2563eb;
-      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.25),
-                  0 0 12px rgba(59, 130, 246, 0.35);
+      transform: translateY(-2px) scale(1.05);
+      border-color: rgba(37, 99, 235, 0.6); /* Adjusted border color */
+      color: #2563eb; /* Adjusted hover text */
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25), 0 0 8px rgba(37, 99, 235, 0.3);
     }
+
+    .filter-btn:active {
+      transform: translateY(-0.5px) scale(1.01);
+    }
+
     .filter-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      background: linear-gradient(135deg, #2563eb, #7c3aed); /* Darker active gradient */
       color: white;
       border-color: transparent;
-      transform: translateY(-3px) scale(1.07);
-      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.25),
-                  0 0 12px rgba(59, 130, 246, 0.35);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25), 0 0 8px rgba(37, 99, 235, 0.3);
     }
-    /* --- UI Components (Status, Search, Notification) --- */
+
+    /* Status indicators - slightly adjusted colors for depth */
     .status-indicator {
       position: relative;
       background: linear-gradient(135deg, var(--status-color-1), var(--status-color-2));
-      animation: float 3s ease-in-out infinite;
+      animation: float 4s ease-in-out infinite;
     }
-    .status-ready { --status-color-1: #10b981; --status-color-2: #059669; }
-    .status-transit { --status-color-1: #3b82f6; --status-color-2: #2563eb; }
-    .status-error { --status-color-1: #ef4444; --status-color-2: #dc2626; }
-    .status-badge { position: relative; overflow: hidden; animation: pulse 2s infinite; }
-    .search-container { position: relative; }
-    .search-container:focus-within::before { opacity: 1; }
+
+    /* Slightly deeper status colors */
+    .status-ready { --status-color-1: #059669; --status-color-2: #047857; } /* Deeper green */
+    .status-transit { --status-color-1: #2563eb; --status-color-2: #1d4ed8; } /* Deeper blue */
+    .status-error { --status-color-1: #dc2626; --status-color-2: #b91c1c; } /* Deeper red */
+    .status-warehouse { --status-color-1: #7c3aed; --status-color-2: #6d28d9; } /* Deeper purple */
+
+    .status-badge {
+      position: relative;
+      overflow: hidden;
+      animation: pulse 3s infinite;
+    }
+
+    /* Search container focus effect */
+    .search-container {
+      position: relative;
+    }
+
+    .search-container:focus-within::before {
+      opacity: 1;
+    }
+
     .search-container::before {
-      content: ''; position: absolute; inset: 0; padding: 2px;
-      background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 2px;
+      background: linear-gradient(45deg, #2563eb, #7c3aed, #db2777); /* Darker gradient */
       border-radius: inherit;
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask-composite: xor; -webkit-mask-composite: xor;
-      opacity: 0; transition: opacity 0.3s ease;
+      mask-composite: xor;
+      -webkit-mask-composite: xor;
+      opacity: 0;
+      transition: opacity 0.4s ease;
     }
+
+    /* Search input */
     .search-input {
-      transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(15px);
+      transition: all 0.4s ease;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
     }
+
     .dark .search-input {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(15, 23, 42, 0.28); /* Darker background */
     }
-    .notification { position: fixed; top: 2rem; right: 2rem; z-index: 60; transform: translateX(400px); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .notification.show { transform: translateX(0) scale(1); animation: slideInRight 0.4s ease; }
-    /* --- Progress Bar --- */
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 60;
+      transform: translateX(400px);
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .notification.show {
+      transform: translateX(0) scale(1);
+      animation: slideInRight 0.5s ease;
+    }
+
+    /* Progress bar */
     .progress-bar {
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 1.5px;
       overflow: hidden;
       position: relative;
     }
+
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #10b981, #3b82f6);
-      border-radius: 2px;
-      transition: width 0.5s ease;
+      background: linear-gradient(90deg, #10b981, #2563eb); /* Adjusted colors */
+      border-radius: 1.5px;
+      transition: width 0.6s ease;
       position: relative;
     }
+
     .progress-fill::after {
       content: '';
       position: absolute;
@@ -332,58 +451,123 @@
       left: 0;
       bottom: 0;
       right: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      animation: shimmer 2s infinite;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shimmer 2.5s infinite;
     }
-    /* --- Effects & Skeletons --- */
+
+    /* Ripple effect */
     .ripple-effect::after {
-      content: ''; position: absolute; border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3); transform: scale(0);
-      animation: ripple 0.6s linear; pointer-events: none;
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(0);
+      animation: ripple 0.8s linear;
+      pointer-events: none;
     }
-    .loading-skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 2.5s infinite; }
-    .dark .loading-skeleton { background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%); }
-    /* --- Custom Scrollbar --- */
-    .custom-scrollbar::-webkit-scrollbar { width: 12px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 20px; }
-    .dark .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3)); border-radius: 20px; border: 2px solid transparent; background-clip: padding-box; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(139, 92, 246, 0.5)); }
-    /* --- Responsive & Accessibility --- */
+
+    /* Loading skeleton */
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 300% 100%;
+      animation: shimmer 3s infinite;
+    }
+
+    .dark .loading-skeleton {
+      background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    }
+
+    /* Custom scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 10px;
+    }
+
+    .dark .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.25)); /* Adjusted thumb */
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(124, 58, 237, 0.35));
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 768px) {
-      .glass-morphism { margin: 1rem; backdrop-filter: blur(20px); }
-      .floating-button { bottom: 1rem; right: 1rem; width: 56px; height: 56px; }
-      .notification { top: 1rem; right: 1rem; left: 1rem; transform: translateY(-100px); }
-      .notification.show { transform: translateY(0); }
+      .glass-morphism {
+        margin: 0.75rem;
+        backdrop-filter: blur(25px);
+      }
+
+      .floating-button {
+        bottom: 1rem;
+        right: 1rem;
+        width: 52px;
+        height: 52px;
+      }
+
+      .notification {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        transform: translateY(-100px);
+      }
+
+      .notification.show {
+        transform: translateY(0);
+      }
+
       .filter-btn {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+        gap: 0.3rem;
       }
     }
+
+    /* Reduce motion preference */
     @media (prefers-reduced-motion: reduce) {
-      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+       #tsparticles {
+           display: none; /* Hide particles if reduced motion is preferred */
+       }
     }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
+  <!-- Particle container - Re-added -->
+  <div id="tsparticles"></div>
   <div class="background-pattern"></div>
   <div class="glass-morphism rounded-3xl w-full max-w-lg overflow-hidden animate-fade-in shadow-large">
     <header class="relative overflow-hidden">
-      <div class="bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 px-6 py-8 relative">
+      <div class="bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500 px-6 py-7 relative"> <!-- Kept original vibrant header -->
         <div class="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-purple-600/20"></div>
         <div class="flex items-center justify-between relative z-10">
-          <div class="flex items-center gap-4">
-            <div class="bg-white/20 rounded-2xl p-3 animate-bounce-gentle shadow-inner-glow">
-              <span class="material-symbols-outlined text-white text-3xl">local_shipping</span>
+          <div class="flex items-center gap-3">
+            <div class="bg-white/25 rounded-2xl p-2.5 animate-bounce-gentle shadow-inner-glow">
+              <span class="material-symbols-outlined text-white text-2xl">local_shipping</span>
             </div>
             <div>
-              <h1 class="text-2xl font-bold text-white mb-1">Parcel Tracker</h1>
-              <p class="text-white/80 text-sm font-medium">Track your shipments with style</p>
+              <h1 class="text-xl font-semibold text-white mb-0.5">Parcel Tracker</h1>
+              <p class="text-white/85 text-xs font-normal">Track your shipments</p>
             </div>
           </div>
-          <div class="flex items-center gap-3">
-            <button id="themeToggle" class="bg-white/20 hover:bg-white/30 rounded-xl p-2.5 transition-all duration-300 hover:scale-110 hover:rotate-180 ripple-effect" title="Toggle Dark Mode">
-              <span class="material-symbols-outlined text-white text-xl" id="themeIcon">dark_mode</span>
+          <div class="flex items-center gap-2.5">
+            <button id="themeToggle" class="bg-white/25 hover:bg-white/35 rounded-xl p-2 transition-all duration-400 hover:scale-105 ripple-effect" title="Toggle Dark Mode">
+              <span class="material-symbols-outlined text-white text-lg" id="themeIcon">dark_mode</span>
             </button>
           </div>
         </div>
@@ -394,94 +578,111 @@
         </div>
       </div>
     </header>
-    <main class="p-6 bg-white/95 dark:bg-surface-800/95 backdrop-blur-sm">
-      <form id="trackingForm" class="space-y-6" novalidate>
+    <main class="p-5 bg-white/90 dark:bg-surface-800/90 backdrop-blur-sm">
+      <form id="trackingForm" class="space-y-5" novalidate>
         <div class="relative group">
-          <label for="email" class="absolute -top-3 left-4 bg-white dark:bg-surface-800 px-3 text-sm font-semibold text-surface-600 dark:text-surface-400 transition-all duration-300 group-focus-within:text-primary-500 z-10 rounded-full">Email Address</label>
-          <input id="email" type="email" required autocomplete="username" class="form-input w-full px-5 py-4 pr-12 text-surface-900 dark:text-surface-100 border-2 border-surface-200 dark:border-surface-600 rounded-2xl focus:outline-none focus:border-primary-500 focus:shadow-glow font-medium" placeholder="Enter your email address">
-          <div class="absolute right-4 top-4 text-surface-400 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500">
-            <span class="material-symbols-outlined">email</span>
+          <label for="email" class="absolute -top-2.5 left-3.5 bg-white dark:bg-surface-800 px-2.5 text-xs font-medium text-surface-500 dark:text-surface-400 transition-all duration-300 group-focus-within:text-primary-500 z-10 rounded-full">Email Address</label>
+          <input id="email" type="email" required autocomplete="username" class="form-input w-full px-7 py-3.5 pr-11 text-surface-800 dark:text-surface-200 border border-surface-200 dark:border-surface-600 rounded-2xl focus:outline-none focus:border-primary-500 focus:shadow-glow font-normal" placeholder="Enter your email">
+          <div class="absolute right-3.5 top-3.5 text-surface-400 pointer-events-none transition-colors duration-200 group-focus-within:text-primary-500">
+            <span class="material-symbols-outlined text-sm">email</span>
           </div>
-          <div class="error-message hidden text-red-500 text-sm mt-2 flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">error</span>
+          <div class="error-message hidden text-red-400 text-xs mt-1.5 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-xs">error</span>
             <span></span>
           </div>
         </div>
         <div class="relative group">
-          <label for="password" class="absolute -top-3 left-4 bg-white dark:bg-surface-800 px-3 text-sm font-semibold text-surface-600 dark:text-surface-400 transition-all duration-300 group-focus-within:text-primary-500 z-10 rounded-full">Password</label>
-          <input id="password" type="password" required autocomplete="current-password" class="form-input w-full px-5 py-4 pr-12 text-surface-900 dark:text-surface-100 border-2 border-surface-200 dark:border-surface-600 rounded-2xl focus:outline-none focus:border-primary-500 focus:shadow-glow font-medium" placeholder="Enter your password">
-          <button type="button" id="togglePassword" class="absolute right-4 top-4 text-surface-400 hover:text-surface-600 transition-all duration-200 z-10 hover:scale-110">
-            <span class="material-symbols-outlined" id="passwordIcon">visibility_off</span>
+          <label for="password" class="absolute -top-2.5 left-3.5 bg-white dark:bg-surface-800 px-2.5 text-xs font-medium text-surface-500 dark:text-surface-400 transition-all duration-300 group-focus-within:text-primary-500 z-10 rounded-full">Password</label>
+          <input id="password" type="password" required autocomplete="current-password" class="form-input w-full px-7 py-3.5 pr-11 text-surface-800 dark:text-surface-200 border border-surface-200 dark:border-surface-600 rounded-2xl focus:outline-none focus:border-primary-500 focus:shadow-glow font-normal" placeholder="Enter your password">
+          <button type="button" id="togglePassword" class="absolute right-3.5 top-3.5 text-surface-400 hover:text-surface-600 transition-all duration-200 z-10 hover:scale-110">
+            <span class="material-symbols-outlined text-sm" id="passwordIcon">visibility_off</span>
           </button>
-          <div class="error-message hidden text-red-500 text-sm mt-2 flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">error</span>
+          <div class="error-message hidden text-red-400 text-xs mt-1.5 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-xs">error</span>
             <span></span>
           </div>
         </div>
-        <button type="submit" id="submitBtn" class="btn-primary w-full py-4 px-6 rounded-2xl text-white font-bold text-lg shadow-glow focus:outline-none focus:ring-4 focus:ring-primary-200 disabled:opacity-70 disabled:cursor-not-allowed relative z-10 ripple-effect">
+        <button type="submit" id="submitBtn" class="btn-primary w-full py-3.5 px-5 rounded-2xl text-white font-semibold text-base shadow-glow focus:outline-none focus:ring-2 focus:ring-primary-200 disabled:opacity-70 disabled:cursor-not-allowed relative z-10 ripple-effect">
           <span id="btnText" class="relative z-10">Track My Parcels</span>
           <div id="btnLoader" class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300">
-            <div class="w-7 h-7 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
           </div>
         </button>
       </form>
-      <div id="statsContainer" class="hidden mt-8 grid grid-cols-3 gap-4">
-        <div class="stats-card text-center p-4 bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 rounded-2xl shadow-soft">
-          <div class="text-3xl font-black text-emerald-600 dark:text-emerald-400 mb-1" id="readyCount">0</div>
-          <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Ready</div>
+      <div id="statsContainer" class="hidden mt-7 grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div class="stats-card text-center p-3.5 bg-gradient-to-br from-emerald-50/80 to-green-100/80 dark:from-emerald-900/25 dark:to-green-900/25 rounded-2xl shadow-soft">
+          <div class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mb-1" id="readyCount">0</div>
+          <div class="text-xs font-medium text-emerald-700 dark:text-emerald-300 uppercase tracking-wider">Ready</div>
         </div>
-        <div class="stats-card text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-2xl shadow-soft">
-          <div class="text-3xl font-black text-blue-600 dark:text-blue-400 mb-1" id="transitCount">0</div>
-          <div class="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider">In Transit</div>
+        <div class="stats-card text-center p-3.5 bg-gradient-to-br from-violet-50/80 to-purple-100/80 dark:from-violet-900/25 dark:to-purple-900/25 rounded-2xl shadow-soft">
+          <div class="text-2xl font-extrabold text-violet-600 dark:text-violet-400 mb-1" id="warehouseCount">0</div>
+          <div class="text-xs font-medium text-violet-700 dark:text-violet-300 uppercase tracking-wider">Warehouse</div>
         </div>
-        <div class="stats-card text-center p-4 bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-2xl shadow-soft">
-          <div class="text-3xl font-black text-purple-600 dark:text-purple-400 mb-1" id="totalCount">0</div>
-          <div class="text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Total</div>
+        <div class="stats-card text-center p-3.5 bg-gradient-to-br from-blue-50/80 to-cyan-100/80 dark:from-blue-900/25 dark:to-cyan-900/25 rounded-2xl shadow-soft">
+          <div class="text-2xl font-extrabold text-blue-600 dark:text-blue-400 mb-1" id="transitCount">0</div>
+          <div class="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wider">In Transit</div>
         </div>
-      </div>
-      <div id="searchContainer" class="hidden mt-8 space-y-4">
-        <div class="flex gap-3 overflow-x-auto overflow-y-visible pt-2 pb-3 -mx-6 px-6">
-          <button class="filter-btn active" data-filter="all"><span class="material-symbols-outlined text-sm">apps</span>All</button>
-          <button class="filter-btn" data-filter="Ready to Pickup"><span class="material-symbols-outlined text-sm">inventory_2</span>Ready</button>
-          <button class="filter-btn" data-filter="В пути"><span class="material-symbols-outlined text-sm">local_shipping</span>Shipped</button>
-          <button class="filter-btn" data-filter="In transit"><span class="material-symbols-outlined text-sm">flight</span>Transit</button>
-          <button class="filter-btn" data-filter="Not Arrived"><span class="material-symbols-outlined text-sm">schedule</span>Pending</button>
+        <div class="stats-card text-center p-3.5 bg-gradient-to-br from-purple-50/80 to-indigo-100/80 dark:from-purple-900/25 dark:to-indigo-900/25 rounded-2xl shadow-soft">
+          <div class="text-2xl font-extrabold text-purple-600 dark:text-purple-400 mb-1" id="totalCount">0</div>
+          <div class="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wider">Total</div>
         </div>
       </div>
-      <div id="results" class="mt-8 space-y-5 max-h-[65vh] overflow-y-auto custom-scrollbar -mx-6 px-6">
-        <div id="loadingPlaceholder" class="hidden space-y-5">
-          <div class="loading-skeleton h-24 rounded-3xl"></div>
-          <div class="loading-skeleton h-24 rounded-3xl"></div>
-          <div class="loading-skeleton h-24 rounded-3xl"></div>
+      <div id="searchContainer" class="hidden mt-7 space-y-3.5">
+        <div class="flex gap-2.5 overflow-x-auto overflow-y-visible pt-1.5 pb-2.5 -mx-5 px-5">
+          <button class="filter-btn active" data-filter="all" title="All Parcels">
+            <span class="material-symbols-outlined text-sm">apps</span>
+          </button>
+          <button class="filter-btn" data-filter="Ready to Pickup" title="Ready to Pickup">
+            <span class="material-symbols-outlined text-sm">inventory_2</span>
+          </button>
+          <button class="filter-btn" data-filter="In the Warehouse" title="In the Warehouse">
+            <span class="material-symbols-outlined text-sm">warehouse</span>
+          </button>
+          <button class="filter-btn" data-filter="В пути" title="Shipped (В пути)">
+            <span class="material-symbols-outlined text-sm">local_shipping</span>
+          </button>
+          <button class="filter-btn" data-filter="In transit" title="In Transit">
+            <span class="material-symbols-outlined text-sm">flight</span>
+          </button>
+          <button class="filter-btn" data-filter="Not Arrived" title="Not Arrived / Pending">
+            <span class="material-symbols-outlined text-sm">schedule</span>
+          </button>
         </div>
-        <div id="emptyState" class="text-center py-16 animate-fade-in-up">
-          <div class="mx-auto w-24 h-24 bg-gradient-to-br from-primary-100 to-purple-100 dark:from-primary-900/30 dark:to-purple-900/30 rounded-3xl flex items-center justify-center mb-6 shadow-soft animate-float">
-            <span class="material-symbols-outlined text-5xl text-primary-500 dark:text-primary-400">package_2</span>
+      </div>
+      <div id="results" class="mt-7 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar -mx-5 px-5">
+        <div id="loadingPlaceholder" class="hidden space-y-4">
+          <div class="loading-skeleton h-22 rounded-3xl"></div>
+          <div class="loading-skeleton h-22 rounded-3xl"></div>
+          <div class="loading-skeleton h-22 rounded-3xl"></div>
+        </div>
+        <div id="emptyState" class="text-center py-14 animate-fade-in-up">
+          <div class="mx-auto w-22 h-22 bg-gradient-to-br from-primary-100/80 to-purple-100/80 dark:from-primary-900/25 dark:to-purple-900/25 rounded-3xl flex items-center justify-center mb-5 shadow-soft animate-float">
+            <span class="material-symbols-outlined text-4xl text-primary-500 dark:text-primary-400">package_2</span>
           </div>
-          <h3 class="text-xl font-bold text-surface-700 dark:text-surface-300 mb-3">No Parcels Yet</h3>
-          <p class="text-surface-500 dark:text-surface-400 max-w-sm mx-auto leading-relaxed">Enter your credentials to track your shipments.</p>
+          <h3 class="text-lg font-semibold text-surface-700 dark:text-surface-300 mb-2.5">No Parcels Yet</h3>
+          <p class="text-surface-500 dark:text-surface-400 max-w-xs mx-auto text-sm leading-relaxed">Enter your credentials to track your shipments.</p>
         </div>
       </div>
     </main>
   </div>
   <button id="refreshBtn" class="floating-button hidden items-center justify-center text-white group">
-    <span class="material-symbols-outlined text-2xl transition-transform duration-300 group-hover:rotate-180">refresh</span>
+    <span class="material-symbols-outlined text-xl transition-transform duration-400 group-hover:rotate-90">refresh</span>
   </button>
   <div id="notification" class="notification">
-    <div class="bg-white/95 dark:bg-surface-800/95 backdrop-blur-sm rounded-3xl shadow-large p-5 border border-surface-200 dark:border-surface-600 min-w-[320px] animate-scale-in">
-      <div class="flex items-start gap-4">
-        <div class="p-2 rounded-2xl" id="notificationIconContainer">
-          <span id="notificationIcon" class="material-symbols-outlined text-2xl"></span>
+    <div class="bg-white/90 dark:bg-surface-800/90 backdrop-blur-sm rounded-3xl shadow-large p-4.5 border border-surface-200 dark:border-surface-600 min-w-[300px] animate-scale-in">
+      <div class="flex items-start gap-3.5">
+        <div class="p-1.5 rounded-2xl" id="notificationIconContainer">
+          <span id="notificationIcon" class="material-symbols-outlined text-xl"></span>
         </div>
         <div class="flex-1">
-          <div id="notificationTitle" class="font-bold text-surface-900 dark:text-surface-100 text-lg"></div>
-          <div id="notificationMessage" class="text-sm text-surface-600 dark:text-surface-400 mt-1 leading-relaxed"></div>
-          <div class="progress-bar mt-3" id="notificationProgress">
+          <div id="notificationTitle" class="font-semibold text-surface-800 dark:text-surface-200 text-base"></div>
+          <div id="notificationMessage" class="text-xs text-surface-600 dark:text-surface-400 mt-1 leading-relaxed"></div>
+          <div class="progress-bar mt-2.5" id="notificationProgress">
             <div class="progress-fill" id="progressFill" style="width: 0%"></div>
           </div>
         </div>
         <button id="closeNotification" class="text-surface-400 hover:text-surface-600 transition-all duration-200 hover:scale-110 p-1 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-700">
-          <span class="material-symbols-outlined">close</span>
+          <span class="material-symbols-outlined text-sm">close</span>
         </button>
       </div>
     </div>
@@ -505,11 +706,13 @@
     const searchContainer = document.getElementById('searchContainer');
     const statsContainer = document.getElementById('statsContainer');
     const notification = document.getElementById('notification');
+    const closeNotification = document.getElementById('closeNotification');
     // --- State Management ---
     let allParcels = [];
     let filteredParcels = [];
     let currentFilter = 'all';
     let lastRefreshTime = null;
+    let timeUpdateInterval;
     // --- VALIDATION ---
     function validateEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -564,17 +767,18 @@
       notificationMessage.textContent = message;
       notificationIcon.textContent = icon;
       const typeStyles = {
-        success: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400',
-        error: 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
-        warning: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400',
-        info: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+        success: 'bg-emerald-100/80 dark:bg-emerald-900/25 text-emerald-600 dark:text-emerald-400',
+        error: 'bg-red-100/80 dark:bg-red-900/25 text-red-600 dark:text-red-400',
+        warning: 'bg-orange-100/80 dark:bg-orange-900/25 text-orange-600 dark:text-orange-400',
+        info: 'bg-blue-100/80 dark:bg-blue-900/25 text-blue-600 dark:text-blue-400'
       };
-      notificationIconContainer.className = `p-2 rounded-2xl ${typeStyles[type] || typeStyles.info}`;
+      notificationIconContainer.className = `p-1.5 rounded-2xl ${typeStyles[type] || typeStyles.info}`;
       if (showProgress) {
         progressBar.classList.remove('hidden');
+        progressFill.style.transition = `width ${duration / 1000}s linear`;
         progressFill.style.width = '100%';
         setTimeout(() => {
-          progressFill.style.width = '0%';
+            progressFill.style.width = '0%';
         }, 100);
       } else {
         progressBar.classList.add('hidden');
@@ -582,39 +786,46 @@
       notification.classList.add('show');
       setTimeout(() => notification.classList.remove('show'), duration);
     }
-    function addRippleEffect(element) {
-        const ripple = document.createElement('span');
-        ripple.style.position = 'absolute';
-        ripple.style.borderRadius = '50%';
-        ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
-        ripple.style.transform = 'scale(0)';
-        ripple.style.animation = 'ripple 0.6s linear';
-        const size = Math.max(element.offsetWidth, element.offsetHeight);
-        ripple.style.width = ripple.style.height = `${size}px`;
-        ripple.style.left = `${(element.offsetWidth - size) / 2}px`;
-        ripple.style.top = `${(element.offsetHeight - size) / 2}px`;
-        element.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 600);
+    function addRippleEffect(e) {
+      const btn = e.currentTarget;
+      const circle = document.createElement("span");
+      const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+      const radius = diameter / 2;
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - btn.offsetLeft - radius}px`;
+      circle.style.top = `${e.clientY - btn.offsetTop - radius}px`;
+      circle.classList.add("ripple-effect");
+      const ripple = btn.getElementsByClassName("ripple-effect")[0];
+      if (ripple) {
+        ripple.remove();
+      }
+      btn.appendChild(circle);
     }
     // --- DATA & RENDERING ---
     function filterAndDisplayResults() {
-      let parcels = allParcels;
-      // Apply filter
+      let parcelsToDisplay = allParcels;
       if (currentFilter !== 'all') {
-        parcels = parcels.filter(item => item.status === currentFilter);
+        parcelsToDisplay = allParcels.filter(item => item.status === currentFilter);
       }
-      filteredParcels = parcels;
-      renderResults(parcels);
-      updateStats();
+      filteredParcels = parcelsToDisplay;
+
+      // Apply a fade-out effect to the current results container
+      results.style.opacity = '0';
+      results.style.transform = 'translateY(15px)';
+      results.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+
+      // Render results after a short delay to allow the fade-out
+      setTimeout(() => {
+         renderResults(filteredParcels);
+         // Apply a fade-in effect to the new results
+         results.style.opacity = '1';
+         results.style.transform = 'translateY(0)';
+      }, 400);
     }
     function renderResults(parcels) {
       results.innerHTML = '';
       if (parcels.length === 0) {
-        if (allParcels.length === 0) {
-          emptyState.classList.remove('hidden');
-        } else {
-          results.innerHTML = renderNoResultsState();
-        }
+        results.innerHTML = renderNoResultsState();
         return;
       }
       emptyState.classList.add('hidden');
@@ -624,39 +835,39 @@
       });
     }
     function createParcelCard(item, index) {
+      // Slightly deeper status config
       const statusConfig = {
-        'Ready to Pickup': { color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-gradient-to-br from-emerald-100 to-green-200 dark:from-emerald-900/40', icon: 'inventory_2', pulse: 'animate-pulse' },
-        'В пути': { color: 'text-blue-600 dark:text-blue-400', bg: 'bg-gradient-to-br from-blue-100 to-cyan-200 dark:from-blue-900/40', icon: 'local_shipping', pulse: 'animate-bounce' },
-        'In transit': { color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-gradient-to-br from-cyan-100 to-blue-200 dark:from-cyan-900/40', icon: 'flight', pulse: 'animate-pulse' },
-        'Not Arrived': { color: 'text-orange-600 dark:text-orange-400', bg: 'bg-gradient-to-br from-orange-100 to-yellow-200 dark:from-orange-900/40', icon: 'schedule', pulse: '' },
-        'Ошибка': { color: 'text-red-600 dark:text-red-400', bg: 'bg-gradient-to-br from-red-100 to-pink-200 dark:from-red-900/40', icon: 'error', pulse: 'animate-pulse' },
+        'Ready to Pickup': { color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-gradient-to-br from-emerald-100/85 to-green-200/85 dark:from-emerald-900/30', icon: 'inventory_2', pulse: 'animate-pulse' },
+        'In the Warehouse': { color: 'text-purple-600 dark:text-purple-400', bg: 'bg-gradient-to-br from-purple-100/85 to-violet-200/85 dark:from-purple-900/30', icon: 'warehouse', pulse: '' },
+        'В пути': { color: 'text-blue-600 dark:text-blue-400', bg: 'bg-gradient-to-br from-blue-100/85 to-cyan-200/85 dark:from-blue-900/30', icon: 'local_shipping', pulse: '' },
+        'In transit': { color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-gradient-to-br from-cyan-100/85 to-blue-200/85 dark:from-cyan-900/30', icon: 'flight', pulse: 'animate-pulse' },
+        'Not Arrived': { color: 'text-orange-600 dark:text-orange-400', bg: 'bg-gradient-to-br from-orange-100/85 to-yellow-200/85 dark:from-orange-900/30', icon: 'schedule', pulse: '' },
+        'Delivered': { color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-gradient-to-br from-indigo-100/85 to-purple-200/85 dark:from-indigo-900/30', icon: 'task_alt', pulse: '' },
+        'Ошибка': { color: 'text-red-600 dark:text-red-400', bg: 'bg-gradient-to-br from-red-100/85 to-pink-200/85 dark:from-red-900/30', icon: 'error', pulse: '' },
       };
       const config = statusConfig[item.status] || statusConfig['Not Arrived'];
-      const lastRefreshText = lastRefreshTime ?
-        `Updated ${Math.floor((Date.now() - lastRefreshTime) / 1000)}s ago` :
-        'Updated just now';
       const card = document.createElement('div');
-      card.className = 'parcel-card p-6 animate-slide-up shadow-medium rounded-3xl border border-surface-200/50 dark:border-surface-600/50 group';
-      card.style.animationDelay = `${index * 100}ms`;
+      card.className = 'parcel-card p-5 animate-slide-up shadow-medium rounded-3xl border border-surface-200/50 dark:border-surface-600/50 group';
+      card.style.animationDelay = `${index * 120}ms`;
       card.innerHTML = `
-        <div class="flex items-start gap-5">
-          <div class="status-indicator ${config.bg} p-4 rounded-3xl ${config.pulse} group-hover:scale-110 transition-transform duration-300">
-            <span class="material-symbols-outlined ${config.color} text-3xl">${config.icon}</span>
+        <div class="flex items-start gap-4">
+          <div class="status-indicator ${config.bg} p-3.5 rounded-2xl ${config.pulse || ''} group-hover:scale-105 transition-transform duration-400">
+            <span class="material-symbols-outlined ${config.color} text-2xl">${config.icon}</span>
           </div>
           <div class="flex-1 min-w-0">
-            <div class="flex justify-between items-start mb-3">
-              <div class="font-bold text-surface-900 dark:text-surface-100 text-lg truncate pr-3" title="${item.trackingCode || ''}">${item.trackingCode || 'No tracking code'}</div>
-              <span class="status-badge ${config.bg} ${config.color} px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap shadow-soft">${item.status || 'Unknown'}</span>
+            <div class="flex justify-between items-start mb-2.5">
+              <div class="font-semibold text-surface-800 dark:text-surface-200 text-base truncate pr-2.5" title="${item.trackingCode || ''}">${item.trackingCode || 'No tracking code'}</div>
+              <span class="status-badge ${config.bg} ${config.color} px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-soft ${config.pulse ? 'animate-none' : ''}">${item.status || 'Unknown'}</span>
             </div>
-            <p class="text-surface-600 dark:text-surface-400 mb-4 text-sm font-medium">${item.packageName || 'No description'}</p>
+            <p class="text-surface-600 dark:text-surface-400 mb-3.5 text-sm font-normal">${item.packageName || 'No description'}</p>
             <div class="flex justify-between items-center">
-              <div class="text-xs text-surface-400 font-medium flex items-center gap-2">
-                <span class="material-symbols-outlined text-sm text-primary-400">schedule</span>
-                <span class="bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 px-2 py-1 rounded-lg">${lastRefreshText}</span>
+              <div class="time-ago text-xs text-surface-400 font-normal flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-xs text-primary-500">schedule</span>
+                <span class="bg-primary-50/80 dark:bg-primary-900/25 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded-md"></span>
               </div>
-              <div class="flex items-center gap-2">
-                <button class="copy-btn bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 shadow-soft hover:shadow-glow">
-                  <span class="material-symbols-outlined text-sm">content_copy</span>
+              <div class="flex items-center gap-1.5">
+                <button class="copy-btn bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all hover:scale-105 shadow-soft hover:shadow-glow">
+                  <span class="material-symbols-outlined text-xs">content_copy</span>
                   Copy
                 </button>
               </div>
@@ -667,52 +878,82 @@
       copyBtn.addEventListener('click', async () => {
         try {
           await navigator.clipboard.writeText(item.trackingCode || '');
-          showNotification('Success!', 'Tracking code copied to clipboard.', 'content_copy', 'success', 3000, true);
-          copyBtn.innerHTML = `<span class="material-symbols-outlined text-sm">done</span> Copied!`;
+          showNotification('Success!', 'Tracking code copied.', 'content_copy', 'success', 2500, true);
+          const originalHTML = copyBtn.innerHTML;
+          copyBtn.innerHTML = `<span class="material-symbols-outlined text-xs">done</span> Copied!`;
+          copyBtn.style.transform = 'scale(1.08)';
           setTimeout(() => {
-            copyBtn.innerHTML = `<span class="material-symbols-outlined text-sm">content_copy</span> Copy`;
-          }, 2500);
+             copyBtn.style.transform = 'scale(1)';
+             setTimeout(() => {
+                 copyBtn.innerHTML = originalHTML;
+             }, 100);
+          }, 2000);
         } catch (err) {
-          showNotification('Copy Failed', 'Could not copy to clipboard.', 'error', 'error');
+          showNotification('Copy Failed', 'Could not copy.', 'error', 'error');
         }
       });
       return card;
     }
     function renderNoResultsState() {
+      const message = allParcels.length > 0
+        ? `<h3 class="text-base font-semibold text-surface-700 dark:text-surface-300 mb-1.5">No Parcels Found</h3><p class="text-surface-500 dark:text-surface-400 text-sm">Try a different filter.</p>`
+        : `<h3 class="text-lg font-semibold text-surface-700 dark:text-surface-300 mb-2.5">No Parcels Yet</h3><p class="text-surface-500 dark:text-surface-400 max-w-xs mx-auto text-sm leading-relaxed">Enter your credentials to track your shipments.</p>`;
+      const icon = allParcels.length > 0 ? 'filter_list_off' : 'package_2';
       return `
         <div class="text-center py-12 animate-fade-in-up">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 rounded-3xl flex items-center justify-center mb-6 shadow-soft animate-float">
-            <span class="material-symbols-outlined text-4xl text-orange-500">filter_list_off</span>
+          <div class="mx-auto w-18 h-18 bg-gradient-to-br from-orange-100/80 to-red-100/80 dark:from-orange-900/25 rounded-3xl flex items-center justify-center mb-5 shadow-soft animate-float">
+            <span class="material-symbols-outlined text-3xl text-orange-500">${icon}</span>
           </div>
-          <h3 class="text-lg font-bold text-surface-700 dark:text-surface-300 mb-2">No Parcels Found</h3>
-          <p class="text-surface-500 dark:text-surface-400">Try selecting a different filter.</p>
+          ${message}
         </div>`;
     }
+    // UPDATED: updateStats now calculates and animates the "warehouse" count
     function updateStats() {
       const stats = {
         ready: allParcels.filter(p => p.status === 'Ready to Pickup').length,
+        warehouse: allParcels.filter(p => p.status === 'In the Warehouse').length,
         transit: allParcels.filter(p => p.status === 'В пути' || p.status === 'In transit').length,
         total: allParcels.length
       };
       animateCounter(document.getElementById('readyCount'), stats.ready);
+      animateCounter(document.getElementById('warehouseCount'), stats.warehouse);
       animateCounter(document.getElementById('transitCount'), stats.transit);
       animateCounter(document.getElementById('totalCount'), stats.total);
     }
     function animateCounter(element, targetValue) {
       const startValue = parseInt(element.textContent) || 0;
       if (startValue === targetValue) return;
-      const duration = 500;
+      const duration = 1000;
       let startTime = null;
       function animationStep(currentTime) {
         if (!startTime) startTime = currentTime;
         const progress = Math.min((currentTime - startTime) / duration, 1);
-        const currentValue = Math.floor(progress * (targetValue - startValue) + startValue);
+
+        // Use a smooth easing function (ease-out-quart)
+        const easedProgress = 1 - Math.pow(1 - progress, 4);
+
+        const currentValue = Math.floor(easedProgress * (targetValue - startValue) + startValue);
         element.textContent = currentValue;
         if (progress < 1) {
           requestAnimationFrame(animationStep);
         }
       }
       requestAnimationFrame(animationStep);
+    }
+    // --- TIME UPDATE ---
+    function updateTimeAgo() {
+      if (!lastRefreshTime) return;
+      const timeElements = document.querySelectorAll('.time-ago span:last-child');
+      timeElements.forEach(el => {
+        const seconds = Math.floor((Date.now() - lastRefreshTime) / 1000);
+        if (seconds < 5) {
+            el.textContent = 'Just now';
+        } else if (seconds < 60) {
+            el.textContent = `${seconds}s ago`;
+        } else {
+            el.textContent = `${Math.floor(seconds / 60)}m ago`;
+        }
+      });
     }
     // --- EVENT LISTENERS ---
     async function handleFormSubmit(event) {
@@ -721,193 +962,218 @@
       const email = emailInput.value.trim();
       const password = passwordInput.value;
       let hasErrors = false;
-      if (!email) {
-        showFieldError('email', 'Email is required');
-        hasErrors = true;
-      } else if (!validateEmail(email)) {
-        showFieldError('email', 'Please enter a valid email address');
-        hasErrors = true;
+      if (!validateEmail(email)) {
+        showFieldError('email', 'Please enter a valid email address'); hasErrors = true;
       }
-      if (!password) {
-        showFieldError('password', 'Password is required');
-        hasErrors = true;
-      } else if (!validatePassword(password)) {
-        showFieldError('password', 'Password must be at least 6 characters');
-        hasErrors = true;
+      if (!validatePassword(password)) {
+        showFieldError('password', 'Password must be at least 6 characters'); hasErrors = true;
       }
       if (hasErrors) {
-        showNotification('Validation Error', 'Please fix the errors above.', 'error', 'error');
+        showNotification('Validation Error', 'Please fix the errors.', 'error', 'error');
         return;
       }
       setLoadingState(true);
-      lastRefreshTime = Date.now();
       try {
-        // Simulate network delay for better UX feedback
-        await new Promise(resolve => setTimeout(resolve, 1500));
         const res = await fetch('/check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
           body: JSON.stringify({ email, password })
         });
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({}));
-          throw new Error(errorData.error || `Server error: ${res.status}`);
-        }
         const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || `Server error: ${res.status}`);
+        }
+        lastRefreshTime = Date.now();
         allParcels = data;
         if (data.length === 0) {
-          showNotification('No Parcels', 'No shipments found for this account.', 'info', 'warning', 5000, true);
+          showNotification('No Parcels', 'No shipments found.', 'info', 'warning', 4000, true);
         } else {
-          showNotification('Success!', `Found ${data.length} parcel(s).`, 'check_circle', 'success', 4000, true);
+          showNotification('Success!', `Found ${data.length} parcel(s).`, 'check_circle', 'success', 3000, true);
           searchContainer.classList.remove('hidden');
           statsContainer.classList.remove('hidden');
           refreshBtn.classList.remove('hidden');
           refreshBtn.classList.add('flex');
         }
         filterAndDisplayResults();
+        updateStats();
+        updateTimeAgo();
       } catch (err) {
-        showNotification('Connection Error', err.message, 'error', 'error', 6000);
-        results.innerHTML = `<div class="text-center py-12 animate-fade-in-up text-red-500 flex flex-col items-center gap-4">
-          <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-2xl flex items-center justify-center">
-            <span class="material-symbols-outlined text-3xl text-red-500">error</span>
+        showNotification('Request Failed', err.message, 'error', 'error', 5000);
+        results.innerHTML = `<div class="text-center py-12 animate-fade-in-up text-red-500 flex flex-col items-center gap-3.5">
+          <div class="w-14 h-14 bg-red-100/80 dark:bg-red-900/25 rounded-2xl flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl text-red-500">error</span>
           </div>
-          <div>
-            <h3 class="font-bold text-lg mb-2">Connection Failed</h3>
-            <p class="text-sm">${err.message}</p>
-          </div>
+          <div><h3 class="font-semibold text-base mb-1.5">Connection Failed</h3><p class="text-xs">${err.message}</p></div>
         </div>`;
       } finally {
         setLoadingState(false);
       }
     }
-    // Auto-refresh functionality
-    let autoRefreshInterval;
-    function startAutoRefresh() {
-      if (allParcels.length > 0) {
-        autoRefreshInterval = setInterval(() => {
-          if (document.visibilityState === 'visible') {
-            form.dispatchEvent(new Event('submit'));
-          }
-        }, 300000); // Refresh every 5 minutes
-      }
-    }
-    function stopAutoRefresh() {
-      if (autoRefreshInterval) {
-        clearInterval(autoRefreshInterval);
-        autoRefreshInterval = null;
-      }
-    }
-    // Event Listeners
-    form.addEventListener('submit', handleFormSubmit);
-    refreshBtn.addEventListener('click', () => {
-      addRippleEffect(refreshBtn);
-      form.dispatchEvent(new Event('submit'));
-    });
-    // Filter buttons
-    document.addEventListener('click', (e) => {
-      const filterBtn = e.target.closest('.filter-btn');
-      if (filterBtn && !filterBtn.closest('.sort-dropdown')) {
-        addRippleEffect(filterBtn);
-        document.querySelectorAll('.filter-btn:not(.sort-dropdown .filter-btn)').forEach(b => b.classList.remove('active'));
-        filterBtn.classList.add('active');
-        currentFilter = filterBtn.dataset.filter;
-        filterAndDisplayResults();
-        // Remove the following line to disable the "Filter Applied" notification
-        // const filterName = filterBtn.textContent.trim();
-        // showNotification('Filter Applied', `Showing ${filterName.toLowerCase()} parcels.`, 'filter_list', 'info', 2000);
-      }
-    });
-    themeToggle.addEventListener('click', () => {
-      addRippleEffect(themeToggle);
-      const isDark = document.documentElement.classList.toggle('dark');
-      themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
-      try {
-        const theme = isDark ? 'dark' : 'light';
-        // In a real app, this would save to localStorage
-        console.log('Theme changed to:', theme);
-      } catch (e) {
-        console.warn('Could not save theme preference');
-      }
-    });
-    togglePassword.addEventListener('click', () => {
-      addRippleEffect(togglePassword);
-      const isPassword = passwordInput.type === 'password';
-      passwordInput.type = isPassword ? 'text' : 'password';
-      passwordIcon.textContent = isPassword ? 'visibility' : 'visibility_off';
-    });
-    document.getElementById('closeNotification').addEventListener('click', () => {
-      notification.classList.remove('show');
-    });
-    // Auto-hide notification on click outside
-    notification.addEventListener('click', (e) => {
-      if (e.target === notification) {
-        notification.classList.remove('show');
-      }
-    });
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      // Ctrl/Cmd + R to refresh
-      if ((e.ctrlKey || e.metaKey) && e.key === 'r' && allParcels.length > 0) {
-        e.preventDefault();
-        form.dispatchEvent(new Event('submit'));
-      }
-      // Escape to close notification
-      if (e.key === 'Escape') {
-        notification.classList.remove('show');
-      }
-    });
-    // Page visibility change handler
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && allParcels.length > 0) {
-        // Check if it's been more than 10 minutes since last refresh
-        if (lastRefreshTime && Date.now() - lastRefreshTime > 600000) {
-          form.dispatchEvent(new Event('submit'));
-        }
-      }
-    });
-    // --- INITIALIZATION ---
+    // --- INITIALIZATION & BINDINGS ---
     function init() {
-      // Set theme from system preference
+      // Theme setup
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark');
         themeIcon.textContent = 'light_mode';
       }
-      // Start time updates
-      setInterval(updateTime, 1000);
-      // Show the initial empty state
-      emptyState.classList.remove('hidden');
-      // Start auto-refresh when parcels are loaded
-      startAutoRefresh();
-      // Add focus styles for better accessibility
-      document.addEventListener('focusin', (e) => {
-        if (e.target.matches('input, button')) {
-          e.target.style.outline = '2px solid rgba(59, 130, 246, 0.5)';
-          e.target.style.outlineOffset = '2px';
+
+       // --- PARTICLES.JS INITIALIZATION - Re-added ---
+       // Define the particles configuration
+        const particlesConfig = {
+            fpsLimit: 120,
+            particles: {
+                number: {
+                    value: 80, // Adjust number of particles
+                    density: {
+                        enable: true,
+                        area: 800
+                    }
+                },
+                color: {
+                    value: ["#3b82f6", "#8b5cf6", "#ec4899", "#ffffff"], // Blue, Purple, Pink, White
+                },
+                shape: {
+                    type: "circle", // Circle particles
+                },
+                opacity: {
+                    value: { min: 0.1, max: 0.5 }, // Variable opacity
+                    animation: {
+                        enable: true,
+                        speed: 1,
+                        minimumValue: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: { min: 1, max: 3 }, // Variable size
+                },
+                links: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff", // White links
+                    opacity: 0.2, // Faint links
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: { min: 0.1, max: 1 }, // Slow movement
+                    direction: "none",
+                    random: true, // Random movement
+                    straight: false,
+                    outModes: "out", // Particles go out of canvas
+                }
+            },
+            interactivity: {
+                detectsOn: "window", // Interact with mouse anywhere
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "grab" // Grab links on hover
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push" // Push particles on click
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        links: {
+                            opacity: 0.5 // Stronger links on grab
+                        }
+                    },
+                    push: {
+                        quantity: 4 // Push 4 particles on click
+                    }
+                }
+            },
+            detectRetina: true
+        };
+
+        // Load the particles configuration when the DOM is ready
+        if (tsParticles) {
+            tsParticles.load("tsparticles", particlesConfig).catch((error) => {
+                console.error("Error loading particles:", error);
+                // If particles fail, the background will still have the animated gradient
+            });
         }
+
+
+      // Event bindings
+      form.addEventListener('submit', handleFormSubmit);
+
+      // Add subtle press effect to the main submit button
+      submitBtn.addEventListener('mousedown', () => {
+          submitBtn.style.transform = 'translateY(-0.5px) scale(0.99)';
+          submitBtn.style.boxShadow = '0 5px 15px rgba(37, 99, 235, 0.3)';
       });
-      document.addEventListener('focusout', (e) => {
-        if (e.target.matches('input, button')) {
-          e.target.style.outline = '';
-          e.target.style.outlineOffset = '';
-        }
+      submitBtn.addEventListener('mouseup', () => {
+          submitBtn.style.transform = '';
+          submitBtn.style.boxShadow = '';
       });
-      // Initialize search input with keyboard support
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
+      submitBtn.addEventListener('mouseleave', () => {
+          submitBtn.style.transform = '';
+          submitBtn.style.boxShadow = '';
+      });
+
+      refreshBtn.addEventListener('click', (e) => { addRippleEffect(e); handleFormSubmit(new Event('submit')); });
+
+      // Add subtle press effect to the refresh button
+       refreshBtn.addEventListener('mousedown', () => {
+          refreshBtn.style.transform = 'scale(1.08) rotate(80deg)';
+      });
+      refreshBtn.addEventListener('mouseup', () => {
+          refreshBtn.style.transform = '';
+      });
+      refreshBtn.addEventListener('mouseleave', () => {
+          refreshBtn.style.transform = '';
+      });
+
+      themeToggle.addEventListener('click', (e) => {
+        addRippleEffect(e);
+        const isDark = document.documentElement.classList.toggle('dark');
+        themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+         // Update particles color mode if needed (optional, tsparticles handles some automatically)
+        // You could potentially re-init particles here for a different dark/light config if desired.
+      });
+      togglePassword.addEventListener('click', (e) => {
+        addRippleEffect(e);
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        passwordIcon.textContent = isPassword ? 'visibility' : 'visibility_off';
+      });
+      document.querySelector('#searchContainer').addEventListener('click', (e) => {
+        const filterBtn = e.target.closest('.filter-btn');
+        if (filterBtn) {
+          addRippleEffect(e);
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          filterBtn.classList.add('active');
+          currentFilter = filterBtn.dataset.filter;
           filterAndDisplayResults();
         }
       });
-      // Welcome animation sequence
-      setTimeout(() => {
-        document.body.style.animation = 'none';
-      }, 3000);
+      closeNotification.addEventListener('click', () => notification.classList.remove('show'));
+
+      // Debounce filter transitions slightly for smoother feel
+      let filterDebounceTimer;
+      const originalFilterAndDisplayResults = filterAndDisplayResults;
+      filterAndDisplayResults = function() {
+        clearTimeout(filterDebounceTimer);
+        filterDebounceTimer = setTimeout(originalFilterAndDisplayResults, 75);
+      };
+
+      // Start intervals
+      timeUpdateInterval = setInterval(updateTimeAgo, 5000);
     }
-    // Cleanup on page unload
-    window.addEventListener('beforeunload', () => {
-      stopAutoRefresh();
-    });
-    init();
+    window.addEventListener('beforeunload', () => clearInterval(timeUpdateInterval));
+    // Initialize when the page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        // DOM is already loaded
+        init();
+    }
   </script>
 </body>
 </html>
