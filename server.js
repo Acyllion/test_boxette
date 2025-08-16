@@ -164,19 +164,26 @@ app.post('/check', async (req, res) => {
 
     // --- If login is successful, proceed to parse all shipment categories ---
 
-const shipmentCategories = [
-  { url: 'shipped', status: 'В пути' },
-  { url: 'in-kiev', status: 'Ready to Pickup' },
-  { url: 'received', status: 'In the Warehouse' }
-];
+    const shippedShipments = await parseShipments(
+      page,
+      'https://profile1.boxette.ge/profile/shipments/shipped',
+      'В пути' // "In transit"
+    );
 
-const allShipments = (
-  await Promise.all(
-    shipmentCategories.map(cat =>
-      parseShipments(page, `https://profile1.boxette.ge/profile/shipments/${cat.url}`, cat.status)
-    )
-  )
-).flat();
+    const readyShipments = await parseShipments(
+      page,
+      'https://profile1.boxette.ge/profile/shipments/in-kiev',
+      'Ready to Pickup'
+    );
+    
+    // *** UPDATED: Parse "Received" shipments and mark them as "In the Warehouse" ***
+    const receivedShipments = await parseShipments(
+      page,
+      'https://profile1.boxette.ge/profile/shipments/received',
+      'In the Warehouse'
+    );
+
+    const allShipments = [...shippedShipments, ...readyShipments, ...receivedShipments];
 
     if (!allShipments.length) {
       console.log('No shipments found for this account across all categories.');
@@ -215,5 +222,5 @@ const allShipments = (
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on 192.168.0.105:${3000}`);
+  console.log(`Server running on 192.168.0.104:${3000}`);
 });
