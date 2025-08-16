@@ -23,18 +23,18 @@ let cluster;
 
 async function initCluster() {
   console.log('Initializing Puppeteer Cluster...');
-  cluster = await Cluster.launch({
-    concurrency: Cluster.CONCURRENCY_PAGE,
-    maxConcurrency: config.maxConcurrent,
-    puppeteerOptions: {
-      headless: 'new',
-      // Removed hardcoded executablePath for better portability.
-      // Puppeteer will download and use a compatible version of Chromium.
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    },
-    timeout: config.timeout,
-    retryLimit: config.retries
-  });
+cluster = await Cluster.launch({
+  concurrency: Cluster.CONCURRENCY_PAGE,
+  maxConcurrency: config.maxConcurrent,
+  puppeteerOptions: {
+    headless: 'new',
+    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // <--- add this
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  },
+  timeout: config.timeout,
+  retryLimit: config.retries
+});
+
 
   await cluster.task(async ({ page, data: code }) => {
     try {
@@ -131,10 +131,12 @@ app.post('/check', async (req, res) => {
   let browser;
   try {
     console.log('Launching browser for Boxette login...');
-    browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox']
-    });
+browser = await puppeteer.launch({
+  headless: 'new',
+  executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // <--- add this
+  args: ['--no-sandbox']
+});
+
 
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(config.timeout);
