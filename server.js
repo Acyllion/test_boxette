@@ -13,7 +13,7 @@ app.use(express.static(__dirname));
 
 // Configuration
 const config = {
-  maxConcurrent: 4,
+  maxConcurrent: 10,
   timeout: 45000, // Increased timeout for potentially slow network
   retries: 2
 };
@@ -94,7 +94,7 @@ const parseShipments = async (page, url, defaultStatus) => {
     
     const parcelSelector = 'div.orange';
     
-    await page.waitForSelector(parcelSelector, { timeout: 10000 }).catch(() => {
+    await page.waitForSelector(parcelSelector, { timeout: 3000 }).catch(() => {
         console.log(`No parcels found on page: ${url}`);
         return [];
     });
@@ -157,7 +157,7 @@ browser = await puppeteer.launch({
 
     try {
         console.log('Verifying login success...');
-        await page.waitForSelector(successSelector, { timeout: 15000 });
+        await page.waitForSelector(successSelector, { timeout: 5000 });
         console.log('Login successful!');
     } catch (e) {
         console.error('Login failed. Could not find success selector.');
