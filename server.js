@@ -222,5 +222,5 @@ app.post('/check', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on 192.168.0.105:${3000}`);
 });
