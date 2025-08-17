@@ -1796,24 +1796,63 @@
     }
     function createParcelCard(item, index) {
       // Slightly deeper status config
-      const statusConfig = {
-        'Ready to Pickup': { color: 'text-emerald-400', bg: 'bg-gradient-to-br from-emerald-900/30', icon: 'inventory_2', pulse: 'animate-pulse' },
-        'In the Warehouse': { color: 'text-purple-400', bg: 'bg-gradient-to-br from-purple-900/30', icon: 'warehouse', pulse: '' },
-        'В пути': { color: 'text-blue-400', bg: 'bg-gradient-to-br from-blue-900/30', icon: 'local_shipping', pulse: '' },
-        'In transit': { color: 'text-cyan-400', bg: 'bg-gradient-to-br from-cyan-900/30', icon: 'flight', pulse: 'animate-pulse' },
-        'Not Arrived': { color: 'text-orange-400', bg: 'bg-gradient-to-br from-orange-900/30', icon: 'schedule', pulse: '' },
-        'Delivered': { color: 'text-indigo-400', bg: 'bg-gradient-to-br from-indigo-900/30', icon: 'task_alt', pulse: '' },
-        'Ошибка': { color: 'text-red-400', bg: 'bg-gradient-to-br from-red-900/30', icon: 'error', pulse: '' },
-      };
+const statusConfig = {
+  'Ready to Pickup': { 
+    color: 'text-emerald-400', 
+    strokeColor: '#10b981', 
+    progress: 100, 
+    icon: 'inventory_2', 
+    pulse: 'animate-pulse' 
+  },
+  'In the Warehouse': { 
+    color: 'text-purple-400', 
+    strokeColor: '#8b5cf6', 
+    progress: 25, 
+    icon: 'warehouse', 
+    pulse: '' 
+  },
+  'В пути': { 
+    color: 'text-blue-400', 
+    strokeColor: '#3b82f6', 
+    progress: 75, 
+    icon: 'local_shipping', 
+    pulse: '' 
+  },
+  'In transit': { 
+    color: 'text-cyan-400', 
+    strokeColor: '#06b6d4', 
+    progress: 60, 
+    icon: 'flight', 
+    pulse: 'animate-pulse' 
+  },
+  'Not Arrived': { 
+    color: 'text-orange-400', 
+    strokeColor: '#f59e0b', 
+    progress: 10, 
+    icon: 'schedule', 
+    pulse: '' 
+  }
+};
       const config = statusConfig[item.status] || statusConfig['Not Arrived'];
       const card = document.createElement('div');
       card.className = 'parcel-card p-5 animate-slide-up shadow-medium rounded-3xl border border-surface-600/50 group';
       card.style.animationDelay = `${index * 120}ms`;
       card.innerHTML = `
         <div class="flex items-start gap-4">
-          <div class="status-indicator ${config.bg} p-3.5 rounded-2xl ${config.pulse || ''} group-hover:scale-105 transition-transform duration-400">
-            <span class="material-symbols-outlined ${config.color} text-2xl">${config.icon}</span>
-          </div>
+<div class="relative p-3.5 group-hover:scale-105 transition-transform duration-400">
+  <svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+    <path d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+          fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    <path d="M18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+          fill="none" stroke="${config.strokeColor}" stroke-width="2.5" 
+          stroke-dasharray="${config.progress}, 100" 
+          stroke-linecap="round"
+          class="transition-all duration-1000 ease-out"/>
+  </svg>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <span class="material-symbols-outlined ${config.color} text-xl">${config.icon}</span>
+  </div>
+</div>
           <div class="flex-1 min-w-0">
             <div class="flex justify-between items-start mb-2.5">
               <div class="font-semibold text-surface-200 text-base truncate pr-2.5" title="${item.trackingCode || ''}">${item.trackingCode || 'No tracking code'}</div>
